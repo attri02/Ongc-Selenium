@@ -39,11 +39,11 @@ public class TestSelenium {
 
         List<WebElement> entryList = parseList(driver);
 
-        for (int i=1;i<entryList.size();i++){
-            driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("Bid Processing");
+        for (int i=0;i<entryList.size();i++){
+            //driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("Bid Processing");
             String listPage = driver.getWindowHandle(); // save list page
 
-            entryList.get(i).findElements(By.cssSelector("td")).get(2).click();
+            entryList.get(i).findElements(By.cssSelector("td")).get(5).click();
 
             //switch to detail page
             for(String winHandle : driver.getWindowHandles()){
@@ -54,7 +54,7 @@ public class TestSelenium {
 
             String detailPage = driver.getWindowHandle(); // save detail page
 
-            driver.findElement(By.id("WD1C-r")).click();
+            driver.findElement(By.id("WD1D-r")).click();
 
 
 
@@ -77,7 +77,7 @@ public class TestSelenium {
 
             /*****************/
 
-            for (int j=0;j<docList.size();j++){
+            for (int j=3;j<docList.size();j++){
 
                 docList.get(j).findElements(By.cssSelector("td")).get(1).click();
                 driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
