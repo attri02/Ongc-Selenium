@@ -38,14 +38,14 @@ public class TestSelenium {
             e.printStackTrace();
         }
 
-        List<WebElement> entryList = parseList(driver);
+        List<String> idList = parseList(driver);
         String listPage = driver.getWindowHandle();// save list page
 
-        for (int i=0;i<entryList.size();i++){
+        for (int i=0;i<idList.size();i++){
             //driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("Bid Processing");
 
-
-            entryList.get(i).findElements(By.cssSelector("td")).get(5).click();
+            String xpath1 = String.format("//*[contains(text(),'%s')]",idList.get(i));
+            driver.findElement(By.xpath(xpath1)).click();
 
             //switch to detail page
             for(String winHandle : driver.getWindowHandles()){
@@ -57,6 +57,7 @@ public class TestSelenium {
             String detailPage = driver.getWindowHandle(); // save detail page
 
             driver.findElement(By.id("WD1D-r")).click();
+
 
 
 
@@ -96,6 +97,7 @@ public class TestSelenium {
                 ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
                 driver.switchTo().window(windows.get(windows.size()-1));
                 driver.findElement(By.cssSelector("a")).click();
+                driver.close();
                 driver.switchTo().window(docListPage);
                 driver.navigate().back();
                 driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
@@ -104,6 +106,12 @@ public class TestSelenium {
 
 
             }
+
+            //close all windows except listPage
+            driver.switchTo().window(docListPage);
+            driver.close();
+            driver.switchTo().window(detailPage);
+            driver.close();
 
 
             driver.switchTo().window(listPage);
@@ -186,15 +194,19 @@ public class TestSelenium {
     }
 
 
-    public static List<WebElement> parseList(WebDriver driver){
+    public static List<String> parseList(WebDriver driver){
 
         driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("Bid Processing");
         //List<WebElement> detailList = driver.findElement(By.id("WD67-contentTBody")).findElements(By.cssSelector("tr"));
         By myBy = new ByChained(By.id("WD67-contentTBody"),By.xpath("//tr[@sst='0']"));
 
         List<WebElement> detailList = driver.findElements(myBy);
+        List<String> idList = new LinkedList<>();
+        for (int i=0;i<detailList.size();i++){
+            idList.add(detailList.get(i).findElements(By.cssSelector("td")).get(5).getText());
+        }
 
-        return detailList;
+        return idList;
 
         //return detailList.get(i).findElements(By.cssSelector("td")).get(2);
 
