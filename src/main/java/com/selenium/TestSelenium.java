@@ -24,20 +24,6 @@ public class TestSelenium {
 
         driver.findElement(By.cssSelector("input[name=Guest]")).click();
 
-
-        //new WebDriverWait(driver, 20)
-        //    .until(d -> d.findElement(By.id("WD0192")));
-
-        //WebDriverWait wait = new WebDriverWait(driver, Timespan.FromSeconds(4));
-
-        //driver.manage().timeouts().implicitlyWait(50, TimeUnit.SECONDS);
-        //try {
-        //    int ch=System.in.read();
-        //    System.out.println("recieved");
-        //} catch (IOException e) {
-        //    e.printStackTrace();
-        //}
-
         try{ Thread.sleep(10000); }
         catch(InterruptedException ex){Thread.currentThread().interrupt();}
 
