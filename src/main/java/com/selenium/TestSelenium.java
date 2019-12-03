@@ -2,6 +2,7 @@ package com.selenium;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
@@ -38,10 +39,11 @@ public class TestSelenium {
         }
 
         List<WebElement> entryList = parseList(driver);
+        String listPage = driver.getWindowHandle();// save list page
 
         for (int i=0;i<entryList.size();i++){
             //driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("Bid Processing");
-            String listPage = driver.getWindowHandle(); // save list page
+
 
             entryList.get(i).findElements(By.cssSelector("td")).get(5).click();
 
@@ -65,9 +67,8 @@ public class TestSelenium {
 
             driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
 
+
             driver.findElement(By.id("cfx_folder_detail_cell_0_0")).click();
-
-
 
             String docListPage = driver.getWindowHandle();
 
@@ -77,16 +78,36 @@ public class TestSelenium {
 
             /*****************/
 
-            for (int j=3;j<docList.size();j++){
+            List<String> docListName = new LinkedList<>();
 
-                docList.get(j).findElements(By.cssSelector("td")).get(1).click();
+
+            for (int j=3;j<docList.size();j++) {
+                docListName.add(docList.get(j).findElements(By.cssSelector("td")).get(1).getText());
+            }
+
+            for (int k=0;k<docListName.size();k++){
+                String xpath = String.format("//*[contains(text(),'%s')]",docListName.get(k));
+                driver.findElement(By.xpath(xpath)).click();
+
+                //docList.get(k).findElements(By.cssSelector("td")).get(1).findElement(By.cssSelector("a")).click();
                 driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
-                driver.findElement(By.className("sapTbvStd")).findElement(By.id("cfx_dktabid_row_0")).findElements(By.cssSelector("td")).get(1).click();
+                driver.findElement(By.className("sapTbvStd")).findElement(By.id("cfx_dktabid_row_0")).findElements(By.cssSelector("td")).get(1).findElement(By.cssSelector("a")).click();
+
+                ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
+                driver.switchTo().window(windows.get(windows.size()-1));
+                driver.findElement(By.cssSelector("a")).click();
+                driver.switchTo().window(docListPage);
+                driver.navigate().back();
+                driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
 
 
 
 
             }
+
+
+            driver.switchTo().window(listPage);
+            driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("Bid Processing");
 
 
 
