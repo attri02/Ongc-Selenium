@@ -30,34 +30,42 @@ public class TestSelenium {
 
         //WebDriverWait wait = new WebDriverWait(driver, Timespan.FromSeconds(4));
 
-        //driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
-        try {
-            int ch=System.in.read();
-            System.out.println("recieved");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //driver.manage().timeouts().implicitlyWait(50, TimeUnit.SECONDS);
+        //try {
+        //    int ch=System.in.read();
+        //    System.out.println("recieved");
+        //} catch (IOException e) {
+        //    e.printStackTrace();
+        //}
+
+        try{ Thread.sleep(10000); }
+        catch(InterruptedException ex){Thread.currentThread().interrupt();}
 
         List<String> idList = parseList(driver);
         String listPage = driver.getWindowHandle();// save list page
 
         for (int i=0;i<idList.size();i++){
-            //driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("Bid Processing");
 
             String xpath1 = String.format("//*[contains(text(),'%s')]",idList.get(i));
             driver.findElement(By.xpath(xpath1)).click();
+
+            try{ Thread.sleep(10000); }
+            catch(InterruptedException ex){Thread.currentThread().interrupt();}
 
             //switch to detail page
             for(String winHandle : driver.getWindowHandles()){
                 driver.switchTo().window(winHandle);
             }
 
+            String detailHtml = driver.getPageSource();
+
             driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea");
 
             String detailPage = driver.getWindowHandle(); // save detail page
 
             driver.findElement(By.id("WD1D-r")).click();
-
+            try{ Thread.sleep(10000); }
+            catch(InterruptedException ex){Thread.currentThread().interrupt();}
 
 
 
@@ -68,8 +76,11 @@ public class TestSelenium {
 
             driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
 
+            String xpath2 = "//*[contains(text(),'TENDER DOCUMENTS')]";
 
-            driver.findElement(By.id("cfx_folder_detail_cell_0_0")).click();
+            driver.findElement(By.xpath(xpath2)).click();
+            try{ Thread.sleep(3000); }
+            catch(InterruptedException ex){Thread.currentThread().interrupt();}
 
             String docListPage = driver.getWindowHandle();
 
@@ -90,9 +101,14 @@ public class TestSelenium {
                 String xpath = String.format("//*[contains(text(),'%s')]",docListName.get(k));
                 driver.findElement(By.xpath(xpath)).click();
 
-                //docList.get(k).findElements(By.cssSelector("td")).get(1).findElement(By.cssSelector("a")).click();
+                try{ Thread.sleep(4000); }
+                catch(InterruptedException ex){Thread.currentThread().interrupt();}
+
                 driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
                 driver.findElement(By.className("sapTbvStd")).findElement(By.id("cfx_dktabid_row_0")).findElements(By.cssSelector("td")).get(1).findElement(By.cssSelector("a")).click();
+
+                try{ Thread.sleep(4000); }
+                catch(InterruptedException ex){Thread.currentThread().interrupt();}
 
                 ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
                 driver.switchTo().window(windows.get(windows.size()-1));
@@ -101,9 +117,6 @@ public class TestSelenium {
                 driver.switchTo().window(docListPage);
                 driver.navigate().back();
                 driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
-
-
-
 
             }
 
@@ -121,72 +134,6 @@ public class TestSelenium {
 
         }
 
-
-
-
-        /***
-
-
-
-
-
-        driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("Bid Processing");
-
-        String listPage = driver.getWindowHandle(); // save list page
-
-        driver.findElement(By.id("WD0195")).click();
-
-
-
-        //switch to detail page
-        for(String winHandle : driver.getWindowHandles()){
-            driver.switchTo().window(winHandle);
-        }
-
-        driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea");
-
-        String detailPage = driver.getWindowHandle(); // save detail page
-
-        driver.findElement(By.id("WD1C-r")).click();
-
-
-
-        //switch to docPage
-        for(String winHandle : driver.getWindowHandles()){
-            driver.switchTo().window(winHandle);
-        }
-
-        driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
-
-        driver.findElement(By.id("cfx_folder_detail_cell_0_0")).click();
-
-
-
-        String docListPage = driver.getWindowHandle();
-
-        driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
-
-
-
-
-***/
-
-
-
-
-
-
-
-        //List<WebElement> detailElements = driver.findElements(By.cssSelector("a[class=  urLnkFunction urTxtStd]"));
-        //
-        //
-        //detailElements.get(3).click();
-
-        //WebElement element = driver.findElement(By.name("q"));
-        //element.sendKeys("terminator\n");
-
-        //System.out.println("Title: " + driver.getTitle());
-        //driver.quit();
 
     }
     public static void main(String[] args){
@@ -207,8 +154,6 @@ public class TestSelenium {
         }
 
         return idList;
-
-        //return detailList.get(i).findElements(By.cssSelector("td")).get(2);
 
     }
 
