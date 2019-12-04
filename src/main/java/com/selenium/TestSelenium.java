@@ -29,6 +29,7 @@ public class TestSelenium {
 
         List<String> idList = parseList(driver);
         String listPage = driver.getWindowHandle();// save list page
+        List<String> detailPagesHtml = new LinkedList<>();
 
         for (int i=0;i<idList.size();i++){
 
@@ -43,7 +44,7 @@ public class TestSelenium {
                 driver.switchTo().window(winHandle);
             }
 
-            String detailHtml = driver.getPageSource();
+             detailPagesHtml.add(driver.getPageSource());
 
             driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea");
 
@@ -176,7 +177,6 @@ public class TestSelenium {
     public static List<String> parseList(WebDriver driver){
 
         driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("Bid Processing");
-        //List<WebElement> detailList = driver.findElement(By.id("WD67-contentTBody")).findElements(By.cssSelector("tr"));
         By myBy = new ByChained(By.id("WD67-contentTBody"),By.xpath("//tr[@sst='0']"));
 
         List<WebElement> detailList = driver.findElements(myBy);
