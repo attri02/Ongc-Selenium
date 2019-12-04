@@ -90,8 +90,54 @@ public class TestSelenium {
                 try{ Thread.sleep(4000); }
                 catch(InterruptedException ex){Thread.currentThread().interrupt();}
 
-                driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
+                try{driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
                 driver.findElement(By.className("sapTbvStd")).findElement(By.id("cfx_dktabid_row_0")).findElements(By.cssSelector("td")).get(1).findElement(By.cssSelector("a")).click();
+                }catch (Exception e){
+                    String docListPage2 = driver.getWindowHandle();
+
+                    driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
+
+                    List<WebElement> docList2 = driver.findElement(By.className("sapTbvStd")).findElements(By.cssSelector("tr"));
+
+                    /*****************/
+
+                    List<String> docListName2 = new LinkedList<>();
+
+
+                    for (int m=3;m<docList2.size();m++) {
+                        docListName2.add(docList2.get(m).findElements(By.cssSelector("td")).get(1).getText());
+                    }
+
+                    for (int l=0;l<docListName2.size();l++) {
+                        String xpath3 =
+                            String.format("//*[contains(text(),'%s')]", docListName2.get(l));
+                        driver.findElement(By.xpath(xpath3)).click();
+
+                        try {
+                            Thread.sleep(4000);
+                        } catch (InterruptedException ex) {
+                            Thread.currentThread().interrupt();
+                        }
+
+                        driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
+                        driver.findElement(By.className("sapTbvStd")).findElement(By.id("cfx_dktabid_row_0")).findElements(By.cssSelector("td")).get(1).findElement(By.cssSelector("a")).click();
+
+                        try{ Thread.sleep(4000); }
+                        catch(InterruptedException ex){Thread.currentThread().interrupt();}
+
+                        ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
+                        driver.switchTo().window(windows.get(windows.size()-1));
+                        driver.findElement(By.cssSelector("a")).click();
+                        driver.close();
+                        driver.switchTo().window(docListPage2);
+                        driver.navigate().back();
+                        driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
+                    }
+                    driver.navigate().back();
+                    driver.switchTo().defaultContent().switchTo().frame("contentAreaFrame").switchTo().frame("isolatedWorkArea").switchTo().frame("WD0F");
+                    continue;
+                }
+
 
                 try{ Thread.sleep(4000); }
                 catch(InterruptedException ex){Thread.currentThread().interrupt();}
